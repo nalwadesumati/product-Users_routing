@@ -20,17 +20,6 @@ export class ProductDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadProducts();
-
-    this._productService.setFirstProductSub$.subscribe({
-      next: (flag) => {
-        setTimeout(() => {
-          if (flag) {
-            this.selectedProductId = this.productsArr[0].pid;
-            this.setFirstProductAsSelected();
-          }
-        }, 0);
-      },
-    });
   }
 
   loadProducts() {
@@ -38,7 +27,7 @@ export class ProductDashboardComponent implements OnInit {
       next: (data) => {
         console.log(data);
         this.productsArr = data;
-        this.selectedProductId = data[0].pid;
+        this.activateFirstProduct();
       },
       error: (err) => {
         console.log(err);
@@ -46,6 +35,18 @@ export class ProductDashboardComponent implements OnInit {
     });
   }
 
+  activateFirstProduct() {
+    if (!this.productsArr.length) return;
+
+    const first = this.productsArr[0];
+
+    this.selectedProductId = first.pid;
+
+    this._router.navigate([first.pid], {
+      relativeTo: this.ActiveRoutes,
+      queryParams: { cr: first.canReturn },
+    });
+  }
   setFirstProductAsSelected() {
     this._router.navigate([this.productsArr[0].pid], {
       relativeTo: this.ActiveRoutes,
