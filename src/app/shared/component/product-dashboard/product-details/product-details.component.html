@@ -1,0 +1,28 @@
+<mat-card *ngIf="productObj" class=" product-card mt-3 mat-elevation-z16">
+    <mat-card-header>
+        <mat-card-title calss="text-center">
+            {{productObj.pname}}
+        </mat-card-title>
+
+        <mat-card-subtitle [ngClass]="{
+            'text-success' :productObj.pstatus === 'Available' || productObj.pstatus === 'Delivered',
+                        'text-danger' :productObj.pstatus === 'Out of Stock',
+                        'text-warning':productObj.pstatus === 'Limited',
+                        'text-primary' :productObj.pstatus === 'In-progress'
+        }">{{productObj.pstatus}}</mat-card-subtitle>
+    </mat-card-header>
+
+    <img mat-card-image [src]="productObj.imgUrl" [alt]="productObj.pname" [title]="productObj.pname">
+    <mat-card-content>
+        <p [ngClass]="{
+            'text-success' :productObj.canReturn,
+            'text-danger':!productObj.canReturn
+        }">{{productObj.canReturn ? 'Return Available' :'No Return Policy'}}</p>
+    </mat-card-content>
+
+
+    <mat-card-actions class="d-flex justify-content-between">
+        <button (click)="onProductEdit()" mat-raised-button class="btn btn-warning">Edit</button>
+        <button (click)="onProductRemove()" mat-raised-button class="btn btn-danger">Remove</button>
+    </mat-card-actions>
+</mat-card>
